@@ -7,13 +7,13 @@ from selenium.webdriver.support import expected_conditions as EC
 
 url = "https://finance.yahoo.com"
 target = "SPY"
-date1 = "2000-09-11"
-
+date1 = "002000/09/11"
+date2 = "002001/10/21"
 
 
 
 if __name__ == "__main__":
-    driver = webdriver.Safari()
+    driver = webdriver.Edge()
 
     driver.get(url)
 
@@ -47,19 +47,29 @@ if __name__ == "__main__":
     period = driver.find_element(By.CSS_SELECTOR, "#Col1-1-HistoricalDataTable-Proxy > section > div.Pt\(15px\) > div.Bgc\(\$lv1BgColor\).Bdrs\(3px\).P\(10px\) > div:nth-child(1) > div")
     period.click()
 
-    body = driver.find_element(By.TAG_NAME, "body")
-    body.send_keys(Keys.PAGE_DOWN)
+    # body = driver.find_element(By.TAG_NAME, "body")
+    # body.send_keys(Keys.PAGE_DOWN)
 
     start_date = driver.find_element(By.NAME, "startDate")
-    driver.execute_script("arguments[0].setAttribute('value', '2021-06-30')", start_date)
 
-    # start_date.send_keys("2000")
-    # time.sleep(1)
-    # start_date.send_keys("/")
-    # time.sleep(1)
-    # start_date.send_keys("09")
-    # start_date.send_keys(date1)
+    start_date.send_keys(date1)
 
+    end_date = driver.find_element(By.NAME, "endDate")
+
+    end_date.send_keys(date2)
+
+    done_button = driver.find_element(By.CSS_SELECTOR, "#dropdown-menu > div > div.Mt\(15px\) > button.Bgc\(\$linkColor\).Bdrs\(3px\).Px\(20px\).Miw\(100px\).Whs\(nw\).Fz\(s\).Fw\(500\).C\(white\).Bgc\(\$linkActiveColor\)\:h.Bd\(0\).D\(ib\).Cur\(p\).Td\(n\).Py\(9px\).Miw\(80px\)\!.Fl\(start\)")
+    done_button.click()     
+
+    driver.implicitly_wait(5)
+
+    apply_button = driver.find_element(By.CSS_SELECTOR, "#Col1-1-HistoricalDataTable-Proxy > section > div.Pt\(15px\) > div.Bgc\(\$lv1BgColor\).Bdrs\(3px\).P\(10px\) > button")
+    apply_button.click()
+
+    driver.implicitly_wait(5)
+
+    download_bn = driver.find_element(By.CSS_SELECTOR, "#Col1-1-HistoricalDataTable-Proxy > section > div.Pt\(15px\) > div.C\(\$tertiaryColor\).Mt\(20px\).Mb\(15px\) > span.Fl\(end\).Pos\(r\).T\(-6px\) > a")
+    download_bn.click()
+    
     time.sleep(5)
-
     driver.close()

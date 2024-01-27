@@ -1,3 +1,4 @@
+import sys
 import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -13,6 +14,12 @@ date2 = "002001/10/21"
 
 
 if __name__ == "__main__":
+    if len(sys.argv) >= 2:
+        target = sys.argv[1]
+        date1 = '00' + sys.argv[2]
+        date2 = '00' + sys.argv[3]
+
+
     driver = webdriver.Edge()
 
     driver.get(url)

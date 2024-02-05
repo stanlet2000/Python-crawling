@@ -28,7 +28,7 @@ def print_price(target, check_response=False):
     for element in elements:
         if element['aria-label'] == 'Last Price':
             print(element.text)
-    # print(indice.text)
+    print(indice.text)
 
 
 
@@ -36,5 +36,6 @@ if __name__ == '__main__':
     timestep = 10
 
     for i in range(timestep):
+    # while True:
         time.sleep(5)
         print_price(target, check_response=True)

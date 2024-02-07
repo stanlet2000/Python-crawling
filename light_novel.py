@@ -11,42 +11,25 @@ from selenium.webdriver.support import expected_conditions as EC
 
 url = "https://www.lightnovel.us/series/129"
 
-chapter = 257
-
-path_txt = 'output/txt/'+str(chapter)+'.txt'
-path_md = 'output/md/'+str(chapter)+'.md'
 
 
-def write_txt(title, content):
+def write_txt(title, content, chapter):
+    path_txt = 'output/txt/'+str(chapter)+'.txt'
     f = open(path_txt, 'w')
     s = ['\n' if str(sentece)=='<br/>' else str(sentece).replace('\u3000', '') for sentece in content]
     f.write(title.text+'\n')
     f.writelines(s)
     f.close()
 
-def write_md(title, content):
+def write_md(title, content, chapter):
+    path_md = 'output/md/'+str(chapter)+'.md'
     f = open(path_md, 'w')
     s = ['\\\n' if str(sentece)=='<br/>' else str(sentece) for sentece in content]
     f.write('# '+title.text+'\n')
     f.writelines(s)
     f.close()
 
-if __name__ == "__main__":
-    
-
-    driver = webdriver.Edge()
-
-    driver.get(url)
-
-    driver.maximize_window()
-
-    driver.implicitly_wait(5)
-
-    collection = driver.find_element(By.CLASS_NAME, "collection-index")
-
-    indices = collection.find_elements(By.CLASS_NAME, "tab-item")
-
-
+def click_chapter(chapter, driver, collection, indices):
     for i in indices:
         l = i.text.split("-")
         if chapter >= int(l[0]) and chapter <= int(l[1]):
@@ -61,6 +44,8 @@ if __name__ == "__main__":
 
     driver.implicitly_wait(5)
 
+    window_before = driver.window_handles[0]
+
     window_after = driver.window_handles[1]
     driver.switch_to.window(window_after)
 
@@ -73,9 +58,33 @@ if __name__ == "__main__":
 
     content = whole_contents.find("article", id="article-main-contents")
     
-    write_txt(title, content)
+    write_txt(title=title, content=content, chapter=chapter)
 
-    write_md(title=title, content=content)
+    write_md(title=title, content=content, chapter=chapter)
+
+    driver.close()
+    driver.switch_to.window(window_before)
+    
+
+
+
+if __name__ == "__main__":
+    chapter = int(input())
+
+    driver = webdriver.Edge()
+
+    driver.get(url)
+
+    driver.maximize_window()
+
+    driver.implicitly_wait(5)
+
+    collection = driver.find_element(By.CLASS_NAME, "collection-index")
+
+    indices = collection.find_elements(By.CLASS_NAME, "tab-item")
+
+    # click_chapter(chapter=307, driver=driver, collection=collection, indices=indices)
+    for i in range(chapter, chapter+11):
+        click_chapter(chapter=i, driver=driver, collection=collection, indices=indices)
 
     time.sleep(3)
-    driver.close()

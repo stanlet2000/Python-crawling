@@ -14,7 +14,7 @@ url = "https://www.lightnovel.us/series/129"
 
 
 def write_txt(title, content, chapter):
-    path_txt = 'output/txt/'+str(chapter)+'.txt'
+    path_txt = '../light_novel/txt/'+str(chapter)+'.txt'
     f = open(path_txt, 'w')
     s = ['\n' if str(sentece)=='<br/>' else str(sentece).replace('\u3000', '') for sentece in content]
     f.write(title.text+'\n')
@@ -22,7 +22,7 @@ def write_txt(title, content, chapter):
     f.close()
 
 def write_md(title, content, chapter):
-    path_md = 'output/md/'+str(chapter)+'.md'
+    path_md = '../light_novel/md/'+str(chapter)+'.md'
     f = open(path_md, 'w')
     s = ['\\\n' if str(sentece)=='<br/>' else str(sentece) for sentece in content]
     f.write('# '+title.text+'\n')
@@ -39,7 +39,7 @@ def click_chapter(chapter, driver, collection, indices):
     chapters = collection.find_elements(By.CLASS_NAME, "item-box")
 
     for c in chapters:
-        if f"P{str(chapter)}" == c.text:
+        if f"P{chapter:0>2}" == c.text:
             c.click()
 
     driver.implicitly_wait(5)
@@ -84,7 +84,7 @@ if __name__ == "__main__":
     indices = collection.find_elements(By.CLASS_NAME, "tab-item")
 
     # click_chapter(chapter=307, driver=driver, collection=collection, indices=indices)
-    for i in range(chapter, chapter+11):
+    for i in range(chapter, chapter+10):
         click_chapter(chapter=i, driver=driver, collection=collection, indices=indices)
 
     time.sleep(3)
